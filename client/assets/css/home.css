@@ -1,0 +1,84 @@
+html {
+    overflow: hidden;
+    height: 100%;
+}
+
+body {
+    height: 100%;
+    overflow: auto;
+}
+
+.nav-btn {
+	margin-right: 5%;
+}
+
+#home-container {
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	background: #ffb74d;
+	position: absolute;
+}
+
+#login {
+	width: 193px;
+	margin: 30% auto 0;
+}
+
+h1 {
+	margin-bottom: 0;
+}
+
+#work {
+	width: 30% !important;
+	margin: 3% auto !important;
+	display: block !important;
+}
+
+.table-responsive {
+	margin: 2% auto 0;
+	height: 70%;
+	width: 70% !important;
+}
+
+.table {
+	width: 100% !important;
+	background: white;
+}
+
+table {
+    width: 100%;
+}
+
+tbody td, thead th {
+    width: 29%;
+}
+
+thead, tbody { 
+	display: block;
+	padding: 5px;
+}
+
+tbody {
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.btn-block {
+	margin-top: 2%;
+	display: inline-block !important;
+	width: 90% !important;
+	vertical-align: top !important;
+}
+
+.btn-block+.btn-block {
+    margin-top: 2%;
+}
+
+.bg-warning {
+	width: 90%;
+	background: white !important;
+	padding: 10px;
+	margin: 5% auto 0;
+}

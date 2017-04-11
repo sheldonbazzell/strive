@@ -1,0 +1,7 @@
+body {
+	padding-top: 70px;
+}
+
+button, a {
+	border-radius: 0 !important;
+}

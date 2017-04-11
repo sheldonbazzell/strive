@@ -1,0 +1,30 @@
+<div id="container" class="text-center">
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col-md-4">
+				<button type="button" ng-click="updateDistance()" class="btn btn-default btn-lg btn-block">More distance</button>
+				<div ng-class="showDistance ? 'show' : 'hidden'" class="bg-warning">
+					<h5>Average Distance:&nbsp;</h5>
+					<span class="center-block" ng-bind="averages[0]"></span>
+					<button type="button" ng-click="getLocation(distance)" class="btn btn-default btn-md">Find me segments</button>
+				</div>
+			</div>
+			<div class="col-md-4">
+				<button type="button" ng-click="updateElevation()" class="btn btn-default btn-lg btn-block">More elevation</button>
+				<div ng-class="showElevation ? 'show' : 'hidden'" class="bg-warning">
+					<h5>Average Elevation Gained:&nbsp;</h5>
+					<span class="center-block" ng-bind="averages[1]"></span>
+					<button type="button" ng-click="getLocation(elevation)" class="btn btn-default btn-md">Find me segments</button>
+				</div>
+			</div>
+			<div class="col-md-4">
+				<button type="button" ng-click="updatePower()" class="btn btn-default btn-lg btn-block">More power</button>
+				<div ng-class="showPower ? 'show' : 'hidden'" class="bg-warning">
+					<h5>Average Power:&nbsp;</h5>
+					<span class="center-block" ng-bind="averages[2]"></span>
+					<button type="button" ng-click="getLocation(power)" class="btn btn-default btn-md">Find me segments</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

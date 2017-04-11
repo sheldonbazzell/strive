@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>strava_app</title>
+  <script src='angular/angular.js'></script>
+  <script src="http://d3js.org/d3.v3.min.js"></script>
+  <script src='angular-route/angular-route.js'></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src='app.js'></script>
+  <script src='assets/js/chart.js'></script>
+  <script src='assets/js/table.js'></script>
+  <script src='assets/js/dataFactory.js'></script>
+  <script src='assets/js/controllers.js'></script>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+  <link rel="stylesheet" type="text/css" href="assets/css/home.css">
+  <link rel="stylesheet" type="text/css" href="assets/css/compare.css">
+  <link rel="stylesheet" type="text/css" href="assets/css/main.css">
+  <link rel="stylesheet" type="text/css" href="assets/css/index.css">
+</head>
+<body>
+  <nav class="navbar navbar-default navbar-fixed-top" id="top">
+    <div class="container">
+      <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand valign" href="#top">SB</a>
+      </div>
+      <div class="navbar-collapse collapse">
+          <ul class="nav navbar-nav pull-right">
+              <li><a href="#pad">About</a></li>
+          </ul>
+      </div>
+    </div>
+  </nav>
+  <div id="home-container" class="text-center">
+    <a href="https://www.strava.com/oauth/authorize?client_id=17197&response_type=code&redirect_uri=http://127.0.0.1:8000/authorize&approval_prompt=force" id="login" class="center-block">
+    <img class="btn btn-default" src="static/angapp/img/btn_strava_connectwith_light.png">
+    </a>
+  </div>
+</body>
+</html>

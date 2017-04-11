@@ -1,0 +1,50 @@
+#container {
+	background: #ffb74d;
+	width: 80%;
+	position: absolute;
+	top: 15%;
+	bottom: 10%;
+	left: 10%;
+	right: 10%;
+}
+
+svg {
+	display: block;
+	margin: 5% auto 0;
+}
+path {
+	stroke: black;
+	stroke-width: 1;
+	fill: none;
+}
+
+.axis {
+  shape-rendering: crispEdges;
+}
+
+.x.axis line {
+  stroke: lightgrey;
+}
+
+.x.axis .minor {
+  stroke-opacity: .5;
+}
+
+.x.axis path {
+  display: none;
+}
+
+.y.axis line, .y.axis path {
+  fill: none;
+  stroke: #000;
+}
+
+.overlay {
+  fill: none;
+  pointer-events: all;
+}
+
+.focus circle {
+  fill: none;
+  stroke: steelblue;
+}
