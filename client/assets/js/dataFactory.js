@@ -3,14 +3,35 @@ app.factory('dataFactory', ['$http', function($http){
     function dataFactory() {
 
         var activities = [],
-            segments   = [],
+            distance   = [],
+            elevation  = [],
             location;
 
-        this.getSegments = function(args) {
-            console.log(args)
+        this.getSegments = function(args, callback) {
             $http.post('/segments', args).then(function(res) {
-                console.log(res.data);
-                segments = res.data;
+                var sortableDistance  =  [],
+                    sortableElevation = [];
+                for (segment in res.data) {
+                    sortableDistance.push([res.data[segment],res.data[segment].distance])
+                    sortableElevation.push([res.data[segment],res.data[segment].avg_grade])
+                }
+                sortableDistance = sortableDistance.sort(function(a, b) {
+                    return a[1] - b[1]
+                });
+                sortableElevation = sortableElevation.sort(function(a, b) {
+                    return a[1] - b[1]
+                });
+                for (obj of sortableElevation) {
+                    obj.pop();
+                }
+                for (obj of sortableDistance) {
+                    obj.pop();
+                }
+                sortableDistance.reverse()
+                sortableDistance.length = 3;
+                sortableElevation.reverse()
+                sortableElevation.length = 3;
+                callback({'distance':sortableDistance, 'elevation':sortableElevation});
             })
         }
 
@@ -33,10 +54,9 @@ app.factory('dataFactory', ['$http', function($http){
             if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition(
                     function findCoordinates(pos) {
-                        console.log('hello')
                         var lat   = pos.coords.latitude,
                             long  = pos.coords.longitude,
-                            range = .2;
+                            range = .1;
                         var numberOfPoints = 2;
                         var degreesPerPoint = 360 / numberOfPoints;
                         var currentAngle = 0;
@@ -53,8 +73,8 @@ app.factory('dataFactory', ['$http', function($http){
                             points.push(p);
                             currentAngle += degreesPerPoint;
                         }
-                        // if (callback && typeof callback == 'function')
-                        console.log(callback)
+                        if (callback && typeof callback == 'function')
+                            console.log(callback)
                         callback(points);
                     }
                 )

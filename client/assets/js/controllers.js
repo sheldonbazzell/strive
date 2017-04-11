@@ -14,9 +14,11 @@ app.controller('homeController',['$scope', 'dataFactory', function($scope, dF) {
 
 app.controller('compareController',['$scope', 'dataFactory', function($scope, dF) {
 	
-	$scope.averages = []
-	$scope.segments = []
-	$scope.location = []
+	$scope.averages  = []
+	$scope.distance  = []
+	$scope.elevation = []
+	$scope.location  = []
+
 	$scope.getAverages = function() {
 		dF.averages(function(data) {
 			$scope.averages = data;
@@ -43,19 +45,11 @@ app.controller('compareController',['$scope', 'dataFactory', function($scope, dF
 
 	$scope.getLocation = function(arg) {
 		dF.getLocation(function(data) {
-			$scope.location = data;
-			console.log($scope.location)
+			dF.getSegments(data, function(data) {
+				$scope.distance  = data.distance;
+				$scope.elevation = data.elevation
+			})
 		});
-	}
-
-	console.log($scope.location)
-	if ($scope.location.length > 0) {
-		if ($scope.location[0].hasOwnProperty('lat')) {
-			console.log('hello')
-			dF.getSegments(function(data) {
-				$scope.segments = data;
-			});
-		}
 	}
 	
 }]);

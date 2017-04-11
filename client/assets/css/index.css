@@ -1,11 +1,23 @@
 #container {
+	height: auto;
+	position:fixed !important;
+	position:absolute;
+	top:0;
+	right:0;
+	bottom:0;
+	left:0;
+}
+
+.row {
+	padding-top: 2%;
 	background: #ffb74d;
-	width: 80%;
-	position: absolute;
-	top: 15%;
-	bottom: 10%;
-	left: 10%;
-	right: 10%;
+	position:fixed !important;
+	position:absolute;
+	top:13%;
+	right:10%;
+	bottom:10%;
+	left:10%;
+
 }
 
 svg {

@@ -1,18 +1,24 @@
 var mongoose   = require('mongoose'),
         User   = mongoose.model('User'),
-        strava = require('strava-v3');
+        strava = require('strava-v3'),
+        Client = require('node-rest-client').Client;
 
+var client = new Client();
+var token;
+var id;
 function stravaController() {
-    
-    this.index = function(req,res) {
-        User.find({}, function(err,users) {
-            if(err) { res.json(err); }
-            else { res.json(users); }
-        })
-    }
 
     this.main = function(req, res) {
-        res.render("main")
+        var code = req.query.code
+        strava.oauth.getToken(code, function(err, payload) {
+            if (err) {
+                console.log(err)
+            } else {
+                token = payload.access_token;
+                id    = payload.athlete.id;
+            }
+        })
+        res.render("main");
     }
 
     this.getActivities = function(req, res) {
@@ -35,14 +41,34 @@ function stravaController() {
                         tmp['watts'] = obj.average_watts
                     ret.push(tmp)
                 }
-                console.log(ret)
                 res.json(ret)
             }
         });
     }
 
     this.getSegments = function(req, res) {
-        res.json("main")
+        var args = [];
+        for (var coord in req.body) {
+            args.push(req.body[coord].lat)
+            args.push(req.body[coord].long)
+        }
+        args = args.concat(args.splice(0,2))
+        args = args.join(", ")
+        strava.segments.explore({bounds:args}, function(err, payload) {
+            if (err) {
+                console.log(err)
+                res.json(err)
+            } else {
+                var segments  = payload.segments;
+                var ret_distance = segments.sort(function(a, b) {
+                    return a.distance - b.distance;
+                })
+                var ret_elevation = segments.sort(function(a, b) {
+                    return a.avg_grade - b.avg_grade;
+                })
+                res.json(segments)
+            }
+        })
     }
 
 }

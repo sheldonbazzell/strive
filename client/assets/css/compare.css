@@ -3,3 +3,8 @@
 	width: 30% !important;
 	vertical-align: top !important;
 }
+
+.segments {
+	list-style-type: none !important;
+	padding: 0 !important;
+}
