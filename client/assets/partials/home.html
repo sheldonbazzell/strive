@@ -1,25 +1,27 @@
 <div id="container">
 	<div class="row">
 	    <h1 class="text-center">Your Activities</h1>
-		<div class="table-responsive">
-			<table class="table table-hover">
-				<thead>
-				<tr>
-					<th>Name</th>
-					<th>Distance</th>
-					<th>Elevation Gained</th>
-					<th>Average Watts</th>
-				</tr>
-				</thead>
-				<tbody>
-				<tr ng-repeat="activity in activities">
-					<td ng-bind="activity.name"></td>
-					<td ng-bind="activity.distance"></td>
-					<td ng-bind="activity.elevation"></td>
-					<td ng-bind="activity.watts"></td>
-				</tr>
-				</tbody>
-			</table>
+		<div class="fixed-table-container table-responsive z-depth-3">
+			<div class="fixed-table-container-inner">
+				<table cellspacing="0" class="table table-hover">
+					<thead>
+					<tr>
+						<th class="first">Name</th>
+						<th class="second">Distance</th>
+						<th class="third">Elevation Gained</th>
+						<th class="fourth">Average Watts</th>
+					</tr>
+					</thead>
+					<tbody>
+					<tr ng-repeat="activity in activities">
+						<td ng-bind="activity.name"></td>
+						<td ng-bind="activity.distance"></td>
+						<td ng-bind="activity.elevation"></td>
+						<td ng-bind="activity.watts"></td>
+					</tr>
+					</tbody>
+				</table>
+			</div>
 		</div>
 		<d3-chart></d3-chart>
 	</div>

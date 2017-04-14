@@ -1,28 +1,53 @@
-var mongoose   = require('mongoose'),
-        User   = mongoose.model('User'),
-        strava = require('strava-v3'),
-        Client = require('node-rest-client').Client;
+var mongoose    = require('mongoose'),
+        User    = mongoose.model('User'),
+        strava  = require('strava-v3');
+var querystring = require('querystring');
 
-var client = new Client();
-var token;
-var id;
 function stravaController() {
 
-    this.main = function(req, res) {
-        var code = req.query.code
-        strava.oauth.getToken(code, function(err, payload) {
+    var StravaStrategy = require('passport-strava').Strategy;
+
+    var stravaClientId = process.env.stravaClientId || 17197;
+    var stravaClientSecret = process.env.stravaClientSecret || 
+        'a87cb9f889914798567026344d6c0feeb939e206';
+    var TokenRequest = Parse.Object.extend("TokenRequest");
+    var TokenStorage = Parse.Object.extend("TokenStorage");
+
+    var restrictedAcl = new Parse.ACL();
+    restrictedAcl.setPublicReadAccess(false);
+    restrictedAcl.setPublicWriteAccess(false);
+
+    this.authorize = function(req, res) {
+        var tokenRequest = new TokenRequest();
+        tokenRequest.setACL(restrictedAcl);
+        var stravaRedirectEndpoint = 'https://www.strava.com/oauth/authorize?';
+        res.redirect(
+            stravaRedirectEndpoint + querystring.stringify({
+                client_id: stravaClientId,
+                response_type: 'code',
+                redirect_uri: 'http://localhost:8000/index',
+                scope: 'write'
+            })
+        );
+    }
+
+    this.index = function(req, res) {
+        strava.oauth.getToken(req.query.code, function(err, payload) {
             if (err) {
                 console.log(err)
             } else {
-                token = payload.access_token;
-                id    = payload.athlete.id;
+                req.session.token = payload.access_token;
+                if (payload.athelete) {
+                    req.session.id = payload.athlete.id;
+                }
             }
         })
         res.render("main");
     }
 
     this.getActivities = function(req, res) {
-        strava.athlete.listActivities({},function(err,payload) {
+        strava.athlete.listActivities({'access_token':req.session.token},
+            function(err,payload) {
             if (err) {
                 console.log(err)
                 res.json(err)

@@ -1,6 +1,12 @@
 var app = angular.module('app', ['ngRoute'])
+
+
 app.config(function($routeProvider) {
   $routeProvider
+    // .when('/', {
+    //   templateUrl: 'assets/partials/index.html',
+    //   controller: 'indexController'
+    // })
     .when('/', {
       templateUrl: 'assets/partials/home.html',
       controller: 'homeController'

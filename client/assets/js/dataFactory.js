@@ -27,11 +27,14 @@ app.factory('dataFactory', ['$http', function($http){
                 for (obj of sortableDistance) {
                     obj.pop();
                 }
-                sortableDistance.reverse()
+                sortableDistance.reverse();
                 sortableDistance.length = 3;
-                sortableElevation.reverse()
+                sortableElevation.reverse();
+                var power = sortableElevation.slice();
+                power.length = 6;
+                power.splice(0,3)
                 sortableElevation.length = 3;
-                callback({'distance':sortableDistance, 'elevation':sortableElevation});
+                callback({'distance':sortableDistance, 'elevation':sortableElevation, 'power':power});
             })
         }
 
@@ -97,7 +100,7 @@ app.factory('dataFactory', ['$http', function($http){
             return table;
         }
 
-        this.get_activities = function(callback) {
+        this.getActivities = function(callback) {
             $http.get('/get/activities').then(function(res) {
                 if(callback && typeof callback == 'function') {
                     activities = res.data

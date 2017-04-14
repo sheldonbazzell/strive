@@ -3,5 +3,5 @@
     "access_token"    :"6511c09e9dd359c98034f8aed8ccce3253ec8d9b"
     , "client_id"     :"17197"
     , "client_secret" :"a87cb9f889914798567026344d6c0feeb939e206"
-    , "redirect_uri"  :"http://localhost:8000/authorize"
+    , "redirect_uri"  :"http://localhost:8000/index"
 }

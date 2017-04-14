@@ -1,14 +1,24 @@
+app.controller('indexController',['$scope', 'dataFactory', '$location', function($scope, dF, $location) {
+	
+	$scope.authenticate = function() {
+		dF.index(function() {
+			$location.url('/home')
+		})
+	}
+
+}]);
+
 app.controller('homeController',['$scope', 'dataFactory', function($scope, dF) {
 	
 	$scope.activities = []
-	$scope.get_activities = function() {
-		dF.get_activities(function(data) {
-			$scope.activities = data
-			console.log($scope.activities)
-			dF.setTable();
+	$scope.getActivities = function() {
+		dF.getActivities(function(data) {
+			$scope.activities = data;
+			console.log($scope.activities);
+			// dF.setTable();
 		})
 	}
-	$scope.get_activities();
+	$scope.getActivities();
 	
 }]);
 
@@ -17,6 +27,7 @@ app.controller('compareController',['$scope', 'dataFactory', function($scope, dF
 	$scope.averages  = []
 	$scope.distance  = []
 	$scope.elevation = []
+	$scope.power     = []
 	$scope.location  = []
 
 	$scope.getAverages = function() {
@@ -47,30 +58,10 @@ app.controller('compareController',['$scope', 'dataFactory', function($scope, dF
 		dF.getLocation(function(data) {
 			dF.getSegments(data, function(data) {
 				$scope.distance  = data.distance;
-				$scope.elevation = data.elevation
+				$scope.elevation = data.elevation;
+				$scope.power     = data.power;
 			})
 		});
 	}
 	
-}]);
-
-app.controller('indexController',['$scope', 'dataFactory', '$location', function($scope, dF, $location) {
-	
-	$scope.authenticate = function() {
-		dF.index(function() {
-			$location.url('/home')
-		})
-	}
-
-}]);
-
-app.controller('authController',['$scope', 'dataFactory', '$location', function($scope, dF, $location) {
-
-	$scope.authenticate = function() {
-		dF.index(function() {
-			$location.url('/home')
-		})
-	}
-	// $scope.authenticate()
-
 }]);
