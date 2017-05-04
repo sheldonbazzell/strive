@@ -6,10 +6,9 @@ var querystring = require('querystring');
 function stravaController() {
 
     var StravaStrategy = require('passport-strava').Strategy;
-
     var stravaClientId = process.env.stravaClientId || 17197;
     var stravaClientSecret = process.env.stravaClientSecret || 
-        'a87cb9f889914798567026344d6c0feeb939e206';
+        '';
     var TokenRequest = Parse.Object.extend("TokenRequest");
     var TokenStorage = Parse.Object.extend("TokenStorage");
 
@@ -17,7 +16,7 @@ function stravaController() {
     restrictedAcl.setPublicReadAccess(false);
     restrictedAcl.setPublicWriteAccess(false);
 
-    this.authorize = function(req, res) {
+    this.authorize = (req, res) => {
         var tokenRequest = new TokenRequest();
         tokenRequest.setACL(restrictedAcl);
         var stravaRedirectEndpoint = 'https://www.strava.com/oauth/authorize?';
@@ -31,10 +30,11 @@ function stravaController() {
         );
     }
 
-    this.index = function(req, res) {
-        strava.oauth.getToken(req.query.code, function(err, payload) {
+    this.index = (req, res) => {
+
+        strava.oauth.getToken(req.query.code, (err, payload) => {
             if (err) {
-                console.log(err)
+                res.json(err);
             } else {
                 req.session.token = payload.access_token;
                 if (payload.athelete) {
@@ -43,47 +43,41 @@ function stravaController() {
             }
         })
         res.render("main");
+
     }
 
-    this.getActivities = function(req, res) {
-        strava.athlete.listActivities({'access_token':req.session.token},
-            function(err,payload) {
+    this.getActivities = (req, res) => {
+
+        strava.athlete.listActivities({'access_token':req.session.token}, (err,payload) => {
             if (err) {
                 console.log(err)
                 res.json(err)
             } else {
-                var ret = []
-                for (var obj in payload) {
-                    obj = payload[obj]
-                    tmp = {}
-                    if (obj.hasOwnProperty('name'))
-                        tmp['name'] = obj.name
-                    if (obj.hasOwnProperty('distance'))
-                        tmp['distance'] = obj.distance
-                    if (obj.hasOwnProperty('total_elevation_gain'))
-                        tmp['elevation'] = obj.total_elevation_gain
-                    if (obj.hasOwnProperty('average_watts'))
-                        tmp['watts'] = obj.average_watts
-                    ret.push(tmp)
-                }
+                let ret = payload.map((ride) => {
+                    return {
+                        name: ride.name ? ride.name : null,
+                        distance: ride.distance ? ride.distance : null,
+                        elevation: ride.total_elevation_gain ? ride.total_elevation_gain : null,
+                        watts: ride.average_watts ? ride.average_watts : null
+                    }
+                })
                 res.json(ret)
             }
         });
     }
 
-    this.getSegments = function(req, res) {
-        var args = [];
-        for (var coord in req.body) {
-            args.push(req.body[coord].lat)
-            args.push(req.body[coord].long)
-        }
-        args = args.concat(args.splice(0,2))
-        args = args.join(", ")
-        strava.segments.explore({bounds:args}, function(err, payload) {
+    this.getSegments = (req, res) => {
+
+        let coords = req.body.map( c => { return [c.lat, c.long] } )
+        coords = coords.concat.apply([], coords)
+        coords = coords.concat(coords.splice(0,2)).join(", ");
+
+        strava.segments.explore({bounds:coords}, function(err, payload) {
             if (err) {
-                console.log(err)
+                console.log('LINE 83: ', err)
                 res.json(err)
             } else {
+                console.log(payload)
                 var segments  = payload.segments;
                 var ret_distance = segments.sort(function(a, b) {
                     return a.distance - b.distance;

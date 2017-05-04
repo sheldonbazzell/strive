@@ -70,6 +70,7 @@ app.factory('dataFactory', ['$http', function($http){
                 alert("Geolocation is not supported by this browser.");
             }
         }
+        
         let location = this.getLocation();
 
         this.getData = () => activities;
