@@ -2,49 +2,34 @@ app.factory('dataFactory', ['$http', function($http){
 
     function dataFactory() {
 
-        var activities = [],
-            distance   = [],
-            elevation  = [],
-            location;
+        this.getSegments = (args, callback) => {
 
-        this.getSegments = function(args, callback) {
-            $http.post('/segments', args).then(function(res) {
-                var sortableDistance  =  [],
-                    sortableElevation = [];
-                for (segment in res.data) {
-                    sortableDistance.push([res.data[segment],res.data[segment].distance])
-                    sortableElevation.push([res.data[segment],res.data[segment].avg_grade])
-                }
-                sortableDistance = sortableDistance.sort(function(a, b) {
-                    return a[1] - b[1]
-                });
-                sortableElevation = sortableElevation.sort(function(a, b) {
-                    return a[1] - b[1]
-                });
-                for (obj of sortableElevation) {
-                    obj.pop();
-                }
-                for (obj of sortableDistance) {
-                    obj.pop();
-                }
+            $http.post('/segments', args).then((res) => {
+                let sortableDistance = res.data
+                    .map( res => [res, res.distance] )
+                    .sort((a, b) => a[1] - b[1] )
+
+                let sortableElevation = res.data
+                    .map( res => [res, res.avg_grade] )
+                    .sort((a, b) => a[1] - b[1] )
+
                 sortableDistance.reverse();
                 sortableDistance.length = 3;
                 sortableElevation.reverse();
-                var power = sortableElevation.slice();
-                power.length = 6;
-                power.splice(0,3)
+
+                let start = (Math.floor(sortableElevation.length / 2)) - 1,
+                    end = (Math.floor(sortableElevation.length / 2)) + 2;
+                let power = sortableElevation.slice(start, end);
+
                 sortableElevation.length = 3;
+
                 callback({'distance':sortableDistance, 'elevation':sortableElevation, 'power':power});
             })
         }
 
-        this.sendSegments = function() {
-            return segments;
-        }
+        this.sendSegments = () => segments;
 
-        this.sendLocation = function() {
-            return location;
-        }
+        this.sendLocation = () => location;
 
         function Point(lat, long) {
             return {
@@ -53,54 +38,49 @@ app.factory('dataFactory', ['$http', function($http){
             }
         }
 
-        this.getLocation = function(callback) {
+        this.getLocation = (callback) => {
             if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition(
                     function findCoordinates(pos) {
-                        var lat   = pos.coords.latitude,
+                        let lat   = pos.coords.latitude,
                             long  = pos.coords.longitude,
                             range = .1;
-                        var numberOfPoints = 2;
-                        var degreesPerPoint = 360 / numberOfPoints;
-                        var currentAngle = 0;
-                        var x2;
-                        var y2;
+                        let numberOfPoints = 2;
+                        let degreesPerPoint = 360 / numberOfPoints;
+                        let currentAngle = 0;
+                        let x2;
+                        let y2;
 
-                        var points = [];
+                        let points = [];
 
-                        for(var i=0; i < numberOfPoints; i++) {
+                        for(let i=0; i < numberOfPoints; i++) {
                             x2 = Math.cos(currentAngle) * range;
                             y2 = Math.sin(currentAngle) * range;
 
                             p = new Point(lat+x2, long+y2);
+
                             points.push(p);
                             currentAngle += degreesPerPoint;
                         }
                         if (callback && typeof callback == 'function')
-                            console.log(callback)
-                        callback(points);
+                            callback(points);
                     }
                 )
             } else {
                 alert("Geolocation is not supported by this browser.");
             }
         }
-        var location = this.getLocation();
-        console.log(location)
-        this.getData = function() {
-            console.log(activities)
-            return activities;
-        }
+        let location = this.getLocation();
+
+        this.getData = () => activities;
 
         this.setTable = function() {
-            var table = Table(activities);
+            let table = Table(activities);
         }
 
-        this.getTable = function() {
-            return table;
-        }
+        this.getTable = () => table;
 
-        this.getActivities = function(callback) {
+        this.getActivities = (callback) => {
             $http.get('/get/activities').then(function(res) {
                 if(callback && typeof callback == 'function') {
                     activities = res.data
@@ -109,32 +89,18 @@ app.factory('dataFactory', ['$http', function($http){
             })
         }
 
-        this.averages = function(callback) {
+        this.averages = (callback) => {
 
-            var out        = [],
-                distance   = 0,
-                elevation  = 0,
-                watts      = 0;
+            let distance = activities.reduce( (total, a) => total + a.distance, 0 )
+                elevation = activities.reduce( (total, a) => total + a.elevation, 0 ),
+                watts = activities.reduce( (total, a) => total + a.watts, 0 );
 
-            console.log(activities)
+            let pretty = 0.00001 * 100 / 100;
+            let avgDistance  = Math.round((distance / activities.length) + pretty),
+                avgElevation  = Math.round((elevation / activities.length) + pretty),
+                avgWatts  = Math.round((watts / activities.length) + pretty);
 
-            for (activity in activities) 
-                distance += activities[activity].distance
-            for (activity in activities) 
-                elevation += activities[activity].elevation
-            for (activity in activities) 
-                watts += activities[activity].watts
-
-            var avgDistance  = distance   / activities.length,
-                avgElevation = elevation / activities.length,
-                avgWatts     = watts    / activities.length;
-
-            out.push(Math.round((avgDistance + 0.00001 * 100 / 100)));
-            out.push(Math.round((avgElevation + 0.00001 * 100 / 100)));
-            out.push(Math.round((avgWatts + 0.00001 * 100 / 100)));
-
-            console.log(out);
-            callback(out);
+            callback([avgDistance, avgElevation, avgWatts]);
 
         }
     }

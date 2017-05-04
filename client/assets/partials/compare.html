@@ -1,4 +1,4 @@
-<div id="container" class="z-depth-5 text-center">
+<div ng-style="{'background-image':'url('strava_app/client/assets/img/backdrop.jpg')'}" id="container" class="z-depth-5 text-center">
 	<div class="row z-depth-3">
 		<div class="col-md-4">
 			<button type="button" ng-click="updateDistance()" class="btn btn-default btn-lg btn-block">Distance</button>
@@ -6,12 +6,12 @@
 				<figure>
 					<div class="bg-warning">
 						<h3 ng-class="distance.length == 0 ? 'slide-down' : 'no-margin'">Average Distance:&nbsp;
-							<span class="center-block" ng-bind="averages[0]"></span>
+							<span class="averages center-block">{{averages[0]}} meters / ride</span>
 						</h3>
 						<ul class="segments" ng-repeat="segment in distance">
-							<li ng-bind="segment[0].name"></li>
-							<li ng-bind="segment[0].distance"></li>
-							<li>Star this segment</li>
+							<li class="name" ng-bind="segment[0].name"></li>
+							<li>{{segment[0].distance}} meters</li>
+							<li><a>Star this segment</a></li>
 						</ul>
 					</div>
 					<div ng-if="distance.length == 0">
@@ -30,12 +30,12 @@
 					<div class="bg-warning">
 						<h3 ng-class="elevation.length == 0 ? 'slide-down' : 'no-margin'">
 						Average Elevation Gained:&nbsp;
-							<span class="center-block" ng-bind="averages[1]"></span>
+							<span class="averages center-block">{{averages[1]}} meters / ride</span>
 						</h3>
 						<ul class="segments" ng-repeat="segment in elevation">
-							<li ng-bind="segment[0].name"></li>
-							<li ng-bind="segment[0].avg_grade"></li>
-							<li>Star this segment</li>
+							<li class="name" ng-bind="segment[0].name"></li>
+							<li>{{segment[0].avg_grade}}%</li>
+							<li><a>Star this segment</a></li>
 						</ul>
 					</div>
 					<div ng-if="elevation.length == 0">
@@ -53,12 +53,12 @@
 				<figure>
 					<div class="bg-warning">
 						<h3 ng-class="power.length == 0 ? 'slide-down' : 'no-margin'">Average Power:&nbsp;
-							<span class="center-block" ng-bind="averages[2]"></span>
+							<span class="averages center-block">{{averages[2]}} watts / ride</span>
 						</h3>						
 						<ul class="segments" ng-repeat="segment in power">
-							<li ng-bind="segment[0].name"></li>
-							<li ng-bind="segment[0].distance"></li>
-							<li>Star this segment</li>
+							<li class="name" ng-bind="segment[0].name"></li>
+							<li>{{segment[0].distance}} meters</li>
+							<li><a>Star this segment</a></li>
 						</ul>
 					</div>
 					<div ng-if="power.length == 0">

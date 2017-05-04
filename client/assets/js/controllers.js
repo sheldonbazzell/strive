@@ -1,28 +1,26 @@
 app.controller('indexController',['$scope', 'dataFactory', '$location', function($scope, dF, $location) {
 	
-	$scope.authenticate = function() {
-		dF.index(function() {
-			$location.url('/home')
-		})
+	$scope.authenticate = () => {
+		dF.index( () => $location.url('/home') );
+		return;
 	}
 
 }]);
 
 app.controller('homeController',['$scope', 'dataFactory', function($scope, dF) {
 	
-	$scope.activities = []
-	$scope.getActivities = function() {
-		dF.getActivities(function(data) {
+	$scope.getActivities = () => {
+
+		dF.getActivities( data => {
 			$scope.activities = data;
-			console.log($scope.activities);
-			// dF.setTable();
+			dF.setTable();
 		})
 	}
 	$scope.getActivities();
 	
 }]);
 
-app.controller('compareController',['$scope', 'dataFactory', function($scope, dF) {
+app.controller('compareController', ['$scope', 'dataFactory', function($scope, dF) {
 	
 	$scope.averages  = []
 	$scope.distance  = []
@@ -30,8 +28,8 @@ app.controller('compareController',['$scope', 'dataFactory', function($scope, dF
 	$scope.power     = []
 	$scope.location  = []
 
-	$scope.getAverages = function() {
-		dF.averages(function(data) {
+	$scope.getAverages = () => {
+		dF.averages( data => {
 			$scope.averages = data;
 		})
 	}
@@ -41,25 +39,25 @@ app.controller('compareController',['$scope', 'dataFactory', function($scope, dF
 	$scope.showElevation = false
 	$scope.showDistance  = false
 
-	$scope.updatePower = function() {
+	$scope.updatePower = () => {
 		if ($scope.averages[0])
 			$scope.showPower ? $scope.showPower = false : $scope.showPower = true
 	}
-	$scope.updateElevation = function() {
+	$scope.updateElevation = () => {
 		if ($scope.averages[1])
 			$scope.showElevation ? $scope.showElevation = false : $scope.showElevation = true 
 	}
-	$scope.updateDistance = function() {
+	$scope.updateDistance = () => {
 		if ($scope.averages[2])
 			$scope.showDistance  ? $scope.showDistance = false : $scope.showDistance = true 
 	}
 
-	$scope.getLocation = function(arg) {
-		dF.getLocation(function(data) {
-			dF.getSegments(data, function(data) {
-				$scope.distance  = data.distance;
-				$scope.elevation = data.elevation;
-				$scope.power     = data.power;
+	$scope.getLocation = arg => {
+		dF.getLocation( data => {
+			dF.getSegments(data, payload => {
+				$scope.distance  = payload.distance;
+				$scope.elevation = payload.elevation;
+				$scope.power     = payload.power;
 			})
 		});
 	}
