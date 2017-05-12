@@ -1,7 +1,7 @@
-var mongoose    = require('mongoose'),
-        User    = mongoose.model('User'),
-        strava  = require('strava-v3');
-var querystring = require('querystring');
+const mongoose = require('mongoose'),
+        User = mongoose.model('User'),
+        strava = require('strava-v3');
+const querystring = require('querystring');
 
 function stravaController() {
 
@@ -16,7 +16,7 @@ function stravaController() {
     restrictedAcl.setPublicReadAccess(false);
     restrictedAcl.setPublicWriteAccess(false);
 
-    this.authorize = (req, res) => {
+    this.authorize = function(req, res) {
         var tokenRequest = new TokenRequest();
         tokenRequest.setACL(restrictedAcl);
         var stravaRedirectEndpoint = 'https://www.strava.com/oauth/authorize?';
@@ -30,7 +30,7 @@ function stravaController() {
         );
     }
 
-    this.index = (req, res) => {
+    this.index = function(req, res) {
 
         strava.oauth.getToken(req.query.code, (err, payload) => {
             if (err) {
@@ -46,7 +46,7 @@ function stravaController() {
 
     }
 
-    this.getActivities = (req, res) => {
+    this.getActivities = function(req, res) {
 
         strava.athlete.listActivities({'access_token':req.session.token}, (err,payload) => {
             if (err) {
@@ -64,13 +64,13 @@ function stravaController() {
         });
     }
 
-    this.getSegments = (req, res) => {
+    this.getSegments = function(req, res) {
 
         let coords = req.body.map( c => { return [c.lat, c.long] } )
         coords = coords.concat.apply([], coords)
         coords = coords.concat(coords.splice(0,2)).join(", ");
 
-        strava.segments.explore({bounds:coords}, function(err, payload) {
+        strava.segments.explore({bounds:coords}, (err, payload) => {
             if (err) {
                 console.log('LINE 83: ', err)
                 res.json(err)
