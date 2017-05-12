@@ -5,14 +5,14 @@ var querystring = require('querystring');
 
 function stravaController() {
 
-    var StravaStrategy = require('passport-strava').Strategy;
-    var stravaClientId = process.env.stravaClientId || 17197;
-    var stravaClientSecret = process.env.stravaClientSecret || 
-        '';
-    var TokenRequest = Parse.Object.extend("TokenRequest");
-    var TokenStorage = Parse.Object.extend("TokenStorage");
+    const StravaStrategy = require('passport-strava').Strategy;
+    const stravaClientId = process.env.stravaClientId || 17197;
+    const stravaClientSecret = process.env.stravaClientSecret || 
+        'a87cb9f889914798567026344d6c0feeb939e206';
+    const TokenRequest = Parse.Object.extend("TokenRequest");
+    const TokenStorage = Parse.Object.extend("TokenStorage");
 
-    var restrictedAcl = new Parse.ACL();
+    const restrictedAcl = new Parse.ACL();
     restrictedAcl.setPublicReadAccess(false);
     restrictedAcl.setPublicWriteAccess(false);
 
@@ -53,14 +53,12 @@ function stravaController() {
                 console.log(err)
                 res.json(err)
             } else {
-                let ret = payload.map((ride) => {
-                    return {
+                let ret = payload.map( ride => ({
                         name: ride.name ? ride.name : null,
                         distance: ride.distance ? ride.distance : null,
                         elevation: ride.total_elevation_gain ? ride.total_elevation_gain : null,
-                        watts: ride.average_watts ? ride.average_watts : null
-                    }
-                })
+                        watts: ride.average_watts ? ride.average_watts : null 
+                }))
                 res.json(ret)
             }
         });
@@ -77,14 +75,9 @@ function stravaController() {
                 console.log('LINE 83: ', err)
                 res.json(err)
             } else {
-                console.log(payload)
-                var segments  = payload.segments;
-                var ret_distance = segments.sort(function(a, b) {
-                    return a.distance - b.distance;
-                })
-                var ret_elevation = segments.sort(function(a, b) {
-                    return a.avg_grade - b.avg_grade;
-                })
+                let segments  = payload.segments;
+                let ret_distance = segments.sort( (a, b) => a.distance - b.distance )
+                let ret_elevation = segments.sort( (a, b) => a.avg_grade - b.avg_grade )
                 res.json(segments)
             }
         })

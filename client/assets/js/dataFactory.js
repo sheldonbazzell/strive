@@ -2,27 +2,24 @@ app.factory('dataFactory', ['$http', function($http){
 
     function dataFactory() {
 
-        this.getSegments = (args, callback) => {
+        this.getSegments = function(args, callback) {
 
-            $http.post('/segments', args).then((res) => {
+            $http.post('/segments', args).then( res => {
                 let sortableDistance = res.data
                     .map( res => [res, res.distance] )
                     .sort((a, b) => a[1] - b[1] )
 
                 let sortableElevation = res.data
                     .map( res => [res, res.avg_grade] )
-                    .sort((a, b) => a[1] - b[1] )
+                    .sort( (a, b) => a[1] - b[1] )
 
                 sortableDistance.reverse();
                 sortableDistance.length = 3;
                 sortableElevation.reverse();
-
-                let start = (Math.floor(sortableElevation.length / 2)) - 1,
-                    end = (Math.floor(sortableElevation.length / 2)) + 2;
+                const div = Math.floor(sortableElevation.length / 2)
+                const start = div - 1, end = div + 2;
                 let power = sortableElevation.slice(start, end);
-
                 sortableElevation.length = 3;
-
                 callback({'distance':sortableDistance, 'elevation':sortableElevation, 'power':power});
             })
         }
@@ -38,7 +35,7 @@ app.factory('dataFactory', ['$http', function($http){
             }
         }
 
-        this.getLocation = (callback) => {
+        this.getLocation = function(callback) {
             if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition(
                     function findCoordinates(pos) {
@@ -53,7 +50,7 @@ app.factory('dataFactory', ['$http', function($http){
 
                         let points = [];
 
-                        for(let i=0; i < numberOfPoints; i++) {
+                        for(let i = 0; i < numberOfPoints; i++) {
                             x2 = Math.cos(currentAngle) * range;
                             y2 = Math.sin(currentAngle) * range;
 
@@ -82,7 +79,7 @@ app.factory('dataFactory', ['$http', function($http){
         this.getTable = () => table;
 
         this.getActivities = (callback) => {
-            $http.get('/get/activities').then(function(res) {
+            $http.get('/get/activities').then( res => {
                 if(callback && typeof callback == 'function') {
                     activities = res.data
                     callback(res.data);
@@ -90,13 +87,13 @@ app.factory('dataFactory', ['$http', function($http){
             })
         }
 
-        this.averages = (callback) => {
+        this.averages = function(callback) {
 
             let distance = activities.reduce( (total, a) => total + a.distance, 0 )
                 elevation = activities.reduce( (total, a) => total + a.elevation, 0 ),
                 watts = activities.reduce( (total, a) => total + a.watts, 0 );
 
-            let pretty = 0.00001 * 100 / 100;
+            const pretty = 0.00001 * 100 / 100;
             let avgDistance  = Math.round((distance / activities.length) + pretty),
                 avgElevation  = Math.round((elevation / activities.length) + pretty),
                 avgWatts  = Math.round((watts / activities.length) + pretty);

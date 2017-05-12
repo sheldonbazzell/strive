@@ -1,6 +1,6 @@
 app.controller('indexController',['$scope', 'dataFactory', '$location', function($scope, dF, $location) {
 	
-	$scope.authenticate = () => {
+	$scope.authenticate = function() {
 		dF.index( () => $location.url('/home') );
 		return;
 	}
@@ -28,7 +28,7 @@ app.controller('compareController', ['$scope', 'dataFactory', function($scope, d
 	$scope.power     = []
 	$scope.location  = []
 
-	$scope.getAverages = () => {
+	$scope.getAverages = function() {
 		dF.averages( data => {
 			$scope.averages = data;
 		})
@@ -39,20 +39,20 @@ app.controller('compareController', ['$scope', 'dataFactory', function($scope, d
 	$scope.showElevation = false
 	$scope.showDistance  = false
 
-	$scope.updatePower = () => {
+	$scope.updatePower = function() {
 		if ($scope.averages[0])
 			$scope.showPower ? $scope.showPower = false : $scope.showPower = true
 	}
-	$scope.updateElevation = () => {
+	$scope.updateElevation = function() {
 		if ($scope.averages[1])
 			$scope.showElevation ? $scope.showElevation = false : $scope.showElevation = true 
 	}
-	$scope.updateDistance = () => {
+	$scope.updateDistance = function() {
 		if ($scope.averages[2])
 			$scope.showDistance  ? $scope.showDistance = false : $scope.showDistance = true 
 	}
 
-	$scope.getLocation = arg => {
+	$scope.getLocation =  function(arg) {
 		dF.getLocation( data => {
 			dF.getSegments(data, payload => {
 				$scope.distance  = payload.distance;
