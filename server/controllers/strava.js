@@ -8,7 +8,7 @@ function stravaController() {
     const StravaStrategy = require('passport-strava').Strategy;
     const stravaClientId = process.env.stravaClientId || 17197;
     const stravaClientSecret = process.env.stravaClientSecret || 
-        'a87cb9f889914798567026344d6c0feeb939e206';
+        '';
     const TokenRequest = Parse.Object.extend("TokenRequest");
     const TokenStorage = Parse.Object.extend("TokenStorage");
 
